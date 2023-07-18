@@ -3,35 +3,31 @@
 </svelte:head>
 
 <script>
+    import { onMount } from 'svelte';
     import { signIn, signOut } from "@auth/sveltekit/client"
     import { page } from "$app/stores"
-    import * as GMaps from '@googlemaps/js-api-loader'
-    
-    const { Loader } = GMaps;
 
-    const loader = new Loader({
-        apiKey: "AIzaSyAO5_X5yWdTiHWvXXMVJlcpk7trCcTqRFY",
-    });
+    import { PUBLIC_GMAPS_API_KEY } from "$env/static/public";
 
     const mapOptions = {
-    center: {
-        lat: 37.8097343,
-        lng: -98.5556199,
-    },
-    disableDefaultUI: true,
-    zoom: 5
+        center: {
+            lat: 37.8097343,
+            lng: -98.5556199,
+        },
+        disableDefaultUI: true,
+        zoom: 5
     };
 
-    // Promise
-loader
-  .load()
-  .then((google) => {
-    new google.maps.Map(document.getElementById("map"), mapOptions);
-    console.log( google );
-  })
-  .catch(e => {
-    // do something
-  });
+    onMount(async () => {
+		import('@googlemaps/js-api-loader').then((val) => {
+			new val.Loader({
+        apiKey: PUBLIC_GMAPS_API_KEY,
+    }).load().then(() => {
+        new google.maps.Map(document.getElementById("map"), mapOptions);
+			});
+		});
+	});
+    
 </script>
 
 <p>
