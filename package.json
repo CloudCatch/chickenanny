@@ -7,13 +7,24 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/adapter-static": "^2.0.2",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/google.maps": "^3.53.4",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte": "^2.30.0",
+		"iconify-icon": "^1.0.8",
+		"mdsvex": "^0.11.0",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.10.1",
+		"sass": "^1.63.6",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"tslib": "^2.4.1",
@@ -24,6 +35,9 @@
 	"dependencies": {
 		"@auth/core": "^0.9.0",
 		"@auth/sveltekit": "^0.3.5",
-		"@googlemaps/js-api-loader": "^1.16.2"
+		"@fontsource/source-sans-pro": "^5.0.5",
+		"@googlemaps/js-api-loader": "^1.16.2",
+		"firebase": "^10.0.0",
+		"open-props": "^1.5.10"
 	}
 }

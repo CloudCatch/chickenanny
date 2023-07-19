@@ -1,59 +1,64 @@
-<svelte:head>
-    <title>Chicken Nanny</title>
-</svelte:head>
-
 <script>
-    import { onMount } from 'svelte';
-    import { signIn, signOut } from "@auth/sveltekit/client"
-    import { page } from "$app/stores"
+	import { onMount } from 'svelte';
 
-    import { PUBLIC_GMAPS_API_KEY } from "$env/static/public";
+	import { PUBLIC_GMAPS_API_KEY } from '$env/static/public';
 
-    const mapOptions = {
-        center: {
-            lat: 37.8097343,
-            lng: -98.5556199,
-        },
-        disableDefaultUI: true,
-        zoom: 5
-    };
-
-    onMount(async () => {
+	onMount(async () => {
 		import('@googlemaps/js-api-loader').then((val) => {
 			new val.Loader({
-        apiKey: PUBLIC_GMAPS_API_KEY,
-    }).load().then(() => {
-        new google.maps.Map(document.getElementById("map"), mapOptions);
-			});
+				apiKey: PUBLIC_GMAPS_API_KEY
+			})
+				.load()
+				.then(() => {
+					const mapEl = document.getElementById('map');
+
+					const mapOptions = {
+						center: {
+							lat: 37.8097343,
+							lng: -98.5556199
+						},
+						disableDefaultUI: true,
+						zoom: 5,
+						mapId: 'b5d31816b33cdd9b'
+					};
+
+					if (null !== mapEl) {
+						const map = new google.maps.Map(mapEl, mapOptions);
+
+						if (navigator.geolocation) {
+							navigator.geolocation.getCurrentPosition(
+								(position) => {
+									const pos = {
+										lat: position.coords.latitude,
+										lng: position.coords.longitude
+									};
+
+									map.setCenter(pos);
+									map.setZoom(10);
+								},
+								() => {
+									// handleLocationError(true, infoWindow, map.getCenter()!);
+								}
+							);
+						} else {
+							// Browser doesn't support Geolocation
+							// handleLocationError(false, infoWindow, map.getCenter()!);
+						}
+					}
+				});
 		});
 	});
-    
 </script>
 
-<p>
-    {#if $page.data.session}
-      {#if $page.data.session.user?.image}
-        <span
-          style="background-image: url('{$page.data.session.user.image}')"
-          class="avatar"
-        />
-      {/if}
-      <span class="signedInText">
-        <small>Signed in as</small><br />
-        <strong>{$page.data.session.user?.name ?? "User"}</strong>
-      </span>
-      <button on:click={() => signOut()} class="button">Sign out</button>
-    {:else}
-      <span class="notSignedInText">You are not signed in</span>
-      <button on:click={() => signIn("facebook")}>Sign In with Facebook</button>
-    {/if}
-  </p>
+<svelte:head>
+	<title>Chicken Nanny</title>
+</svelte:head>
 
-<div id="map"></div>
+<div id="map" />
 
 <style>
-    #map {
-        width: 100%;
-        height: 100vh;
-    }
+	#map {
+		width: 100%;
+		height: 100vh;
+	}
 </style>
